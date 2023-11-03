@@ -9,7 +9,7 @@ stop_threads = False
 # writes to arduino serial and then returns what the arduino sends back
 def write_read(x):
     arduino.write(bytes(x, 'utf-8'))
-    time.sleep(2)
+    time.sleep(1)
     data = arduino.readline()
     return data
 
