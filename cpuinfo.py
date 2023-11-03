@@ -43,5 +43,6 @@ while True:
             stop_threads = False
             temp_thread().start()
         case 'q':
+            write_read('q')
             stop_threads = True
             break
