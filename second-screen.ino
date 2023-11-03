@@ -56,7 +56,6 @@ void display_temp() {
 }
 
 //TODO: change the range of temperatures displayed (currently 0-64)
-//TODO: display the current position on the graph (currently gets confusing when it loops and the current temp is the same as it was in this position last loop)
 void graph_temp() {
   int pos = 0;
   display.setRotation(0);
@@ -68,7 +67,7 @@ void graph_temp() {
       break;
     }
 
-    display.fillRect(pos, 0, 2, SCREEN_HEIGHT, SSD1306_BLACK);
+    display.fillRect(pos, 0, 4, SCREEN_HEIGHT, SSD1306_BLACK);
     display.fillRect(pos, 64 - in.toInt(), 2, 2, 1);
     display.display();
 
