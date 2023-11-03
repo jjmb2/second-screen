@@ -22,14 +22,26 @@ def send_temp():
     while not stop_threads:
         write_read(str(get_temp()))
 
-txt_temp_thread = threading.Thread(target=send_temp)
+# create the thread which sends temperature data (necessary because threads are single-use)
+def temp_thread():
+    return threading.Thread(target=send_temp)
 
 while True:
-    cmd = input("['t': temperature info, 'q': quit]" )
+    cmd = input("['t': temperature info, 'g': temperature graph, 'q': quit]" )
 
     match cmd:
         case 't':
-            txt_temp_thread.start()
+            write_read('q')
+            stop_threads = True
+            write_read('t')
+            stop_threads = False
+            temp_thread().start()
+        case 'g':
+            write_read('q')
+            stop_threads = True
+            write_read('g')
+            stop_threads = False
+            temp_thread().start()
         case 'q':
             stop_threads = True
             break

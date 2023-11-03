@@ -4,7 +4,7 @@
 #include <Adafruit_SSD1306.h>
 
 Adafruit_SSD1306 display = Adafruit_SSD1306(128, 64);
-String temp;
+String in;
 
 void setup() {
 
@@ -23,11 +23,25 @@ void setup() {
 void loop() {
   // wait for input from script
   while (!Serial.available());
-  temp = Serial.readString();
-  display.clearDisplay();
-  display.setCursor(0, 0);
-  display.print(temp + "C");
-  display.display();
-  delay(2000);
-  Serial.write("0");
+  in = Serial.readString();
+  if (in == "t") {
+    display_temp();
+  }
+}
+
+void display_temp() {
+  while (true) {
+    in = Serial.readString();
+
+    if (in == "q") {
+      break;
+    }
+
+    display.clearDisplay();
+    display.setCursor(0, 0);
+    display.print(in + "C");
+    display.display();
+    delay(2000);
+    Serial.write("0");
+  }
 }
