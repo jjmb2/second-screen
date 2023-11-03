@@ -1,3 +1,4 @@
+import datetime
 import serial
 import threading
 import time
@@ -26,8 +27,17 @@ def send_temp():
 def temp_thread():
     return threading.Thread(target=send_temp)
 
+def send_time():
+    while not stop_threads:
+        now = datetime.datetime.now()
+        time_str = now.strftime("%H:%M")
+        write_read(time_str)
+
+def clock_thread():
+    return threading.Thread(target=send_time)
+
 while True:
-    cmd = input("['t': temperature info, 'g': temperature graph, 'q': quit]" )
+    cmd = input("['t': temperature info, 'g': temperature graph, 'c': clock, 'q': quit]" )
 
     match cmd:
         case 't':
@@ -42,6 +52,12 @@ while True:
             write_read('g')
             stop_threads = False
             temp_thread().start()
+        case 'c':
+            write_read('q')
+            stop_threads = True
+            write_read('c')
+            stop_threads = False
+            clock_thread().start()
         case 'q':
             write_read('q')
             stop_threads = True

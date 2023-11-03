@@ -84,7 +84,7 @@ void setup() {
 
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
   display.display();
-  display.setTextSize(3);
+  display.setTextSize(2);
   display.setTextColor(WHITE);
 }
 
@@ -104,6 +104,9 @@ void loop() {
   } else if (in == "g") {
     display.clearDisplay();
     graph_temp();
+  } else if (in == "c") {
+    display.clearDisplay();
+    display_clock();
   }
 }
 
@@ -144,5 +147,22 @@ void graph_temp() {
     pos = pos % SCREEN_WIDTH;
 
     Serial.write("0");
+  }
+}
+
+void display_clock() {
+  display.setRotation(3);
+  while (true) {
+    while (!Serial.available());
+    in = Serial.readString();
+
+    if (in == "q") {
+      break;
+    }
+
+    display.clearDisplay();
+    display.setCursor(0, 0);
+    display.print(in);
+    display.display();
   }
 }
