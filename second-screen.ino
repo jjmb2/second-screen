@@ -11,8 +11,8 @@ void setup() {
   Serial.begin(9600);
   Serial.setTimeout(1);
 
-  display.begin(SSD1306_SWITCHCAPVCC, 0x3C); // initialize with the I2C addr 0x3D (for the 128x64) // init done // Show image buffer on the display hardware.
-  display.display(); //delay(2000);
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+  display.display();
   display.setRotation(3);
   display.setTextSize(3);
   display.setTextColor(WHITE);
