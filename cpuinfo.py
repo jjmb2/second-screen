@@ -36,8 +36,11 @@ def send_time():
 def clock_thread():
     return threading.Thread(target=send_time)
 
+help_string = "['t': temperature info, 'g': temperature graph, 'c': clock, 'q': quit]"
+print(help_string)
+
 while True:
-    cmd = input("['t': temperature info, 'g': temperature graph, 'c': clock, 'q': quit]" )
+    cmd = input("> ")
 
     match cmd:
         case 't':
@@ -62,3 +65,5 @@ while True:
             write_read('q')
             stop_threads = True
             break
+        case _:
+            print(help_string)
