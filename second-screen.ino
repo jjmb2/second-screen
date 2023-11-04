@@ -190,8 +190,6 @@ void display_all() {
     int splitIdx = in.indexOf('\n', 0);
     String temp = in.substring(0, splitIdx);
     String time = in.substring(splitIdx + 1, in.length());
-    Serial.print(temp);
-    Serial.print(time);
 
     // print temp
     display.setCursor(0, 0);
@@ -201,8 +199,7 @@ void display_all() {
     display.fillRect(pos, 32, 4, 64, SSD1306_BLACK);
     display.fillRect(pos, 96 - temp.toInt(), 2, 2, 1);
 
-    pos += 2;
-    pos = pos % SCREEN_HEIGHT;
+    pos = (pos + 2) % SCREEN_HEIGHT;
 
     // display time
     display.setCursor(0, 100);
