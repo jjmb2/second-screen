@@ -36,7 +36,18 @@ def send_time():
 def clock_thread():
     return threading.Thread(target=send_time)
 
-help_string = "['t': temperature info, 'g': temperature graph, 'c': clock, 'q': quit]"
+def send_all():
+    while not stop_threads:
+        all = str(get_temp())
+        all += '\n';
+        now = datetime.datetime.now()
+        all += now.strftime("%H:%M")
+        write_read(all)
+
+def all_thread():
+    return threading.Thread(target=send_all)
+
+help_string = "['t': temperature info, 'g': temperature graph, 'c': clock, 'a': all, 'q': quit]"
 print(help_string)
 
 while True:
@@ -61,6 +72,12 @@ while True:
             write_read('c')
             stop_threads = False
             clock_thread().start()
+        case 'a':
+            write_read('q')
+            stop_threads = True
+            write_read('a')
+            stop_threads = False
+            all_thread().start()
         case 'q':
             write_read('q')
             stop_threads = True

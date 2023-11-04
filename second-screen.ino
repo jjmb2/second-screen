@@ -107,6 +107,8 @@ void loop() {
   } else if (in == "c") {
     display.clearDisplay();
     display_clock();
+  } else if (in == "a") {
+    display_all();
   }
 }
 
@@ -163,6 +165,49 @@ void display_clock() {
     display.clearDisplay();
     display.setCursor(0, 0);
     display.print(in);
+    display.display();
+  }
+}
+
+void display_all() {
+  display.clearDisplay();
+  int pos = 0;
+  display.setRotation(3);
+
+  while (true) {
+    while (!Serial.available());
+    in = Serial.readString();
+
+    if (in == "q") {
+      break;
+    }
+
+    // clear previous time & temp
+    display.fillRect(0, 0, 64, 20, SSD1306_BLACK);
+    display.fillRect(0, 100, 64, 20, SSD1306_BLACK);
+
+    // parse string
+    int splitIdx = in.indexOf('\n', 0);
+    String temp = in.substring(0, splitIdx);
+    String time = in.substring(splitIdx + 1, in.length());
+    Serial.print(temp);
+    Serial.print(time);
+
+    // print temp
+    display.setCursor(0, 0);
+    display.print(temp + "C");
+
+    // graph temp (from y pos 32-96)
+    display.fillRect(pos, 32, 4, 64, SSD1306_BLACK);
+    display.fillRect(pos, 96 - temp.toInt(), 2, 2, 1);
+
+    pos += 2;
+    pos = pos % SCREEN_HEIGHT;
+
+    // display time
+    display.setCursor(0, 100);
+    display.print(time);
+
     display.display();
   }
 }
