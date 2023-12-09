@@ -189,7 +189,7 @@ void display_clock() {
   }
 }
 
-void display_all(float c, float h, float hic) {
+void display_all(float t, float h, float hic) {
   display.clearDisplay();
   int pos = 0;
   display.setRotation(3);
@@ -203,7 +203,7 @@ void display_all(float c, float h, float hic) {
     }
 
     // clear previous time & temp
-    display.fillRect(0, 0, 64, 20, SSD1306_BLACK);
+    display.fillRect(0, 0, 64, 64, SSD1306_BLACK);
     display.fillRect(0, 100, 64, 20, SSD1306_BLACK);
 
     // parse string
@@ -217,15 +217,21 @@ void display_all(float c, float h, float hic) {
     display.print(temp + "C");
 */
 
-    // print temp, humidity, heat index
+    // print dht11 temp, humidity, heat index
     display.setCursor(0, 0);
-    display.print(t + "°C ");
-    display.print(h + "% ");
-    display.print(hic + "°C");
+    display.print(t, 1);
+    display.print("C\n");
+    display.print(h, 1);
+    display.print("%\n");
+//    display.print(hic);
+//    display.print("C");
 
-    // graph temp (from y pos 32-96)
-    display.fillRect(pos, 32, 4, 64, SSD1306_BLACK);
-    display.fillRect(pos, 96 - temp.toInt(), 2, 2, 1);
+    // print cpu temp
+    display.print(temp + "C");
+
+    // graph temp (from y pos 64-96)
+    display.fillRect(pos, 64, 4, 64, SSD1306_BLACK);
+    display.fillRect(pos, 96 - temp.toInt() / 2, 2, 2, 1);
 
     pos = (pos + 2) % SCREEN_HEIGHT;
 
