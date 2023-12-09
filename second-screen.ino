@@ -1,3 +1,4 @@
+#include "DHT.h"
 #include <SPI.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
@@ -6,8 +7,13 @@
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
 
+#define DHTPIN 5
+#define DHTTYPE DHT11
+
 Adafruit_SSD1306 display = Adafruit_SSD1306(SCREEN_WIDTH, SCREEN_HEIGHT);
 String in;
+
+DHT dht(DHTPIN, DHTTYPE);
 
 // 'thinkchad-logo', 128x64px
 const unsigned char epd_bitmap_thinkchad_logo [] PROGMEM = {
@@ -86,6 +92,8 @@ void setup() {
   display.display();
   display.setTextSize(2);
   display.setTextColor(WHITE);
+
+  dht.begin();
 }
 
 void loop() {
@@ -94,6 +102,27 @@ void loop() {
   display.setRotation(0);
   display.drawBitmap(0, 0, epd_bitmap_thinkchad_logo, 128, 64, WHITE);
   display.display();
+
+  // read from dht
+  float h = dht.readHumidity();
+  float t = dht.readTemperature();
+
+  if (isnan(h) || isnan(t)) {
+    Serial.println(F("Failed to read from DHT sensor!"));
+    return;
+  }
+
+  // compute heat index (isFahrenheit = false)
+  float hic = dht.computeHeatIndex(t, h, false);
+
+  Serial.print(F("Humidity: "));
+  Serial.print(h);
+  Serial.print(F("%  Temperature: "));
+  Serial.print(t);
+  Serial.print(F("°C  "));
+  Serial.print(F("Heat index: "));
+  Serial.print(hic);
+  Serial.print(F("°C"));
 
   // wait for input from script
   while (!Serial.available());
