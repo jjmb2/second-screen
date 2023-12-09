@@ -115,15 +115,6 @@ void loop() {
   // compute heat index (isFahrenheit = false)
   float hic = dht.computeHeatIndex(t, h, false);
 
-  Serial.print(F("Humidity: "));
-  Serial.print(h);
-  Serial.print(F("%  Temperature: "));
-  Serial.print(t);
-  Serial.print(F("°C  "));
-  Serial.print(F("Heat index: "));
-  Serial.print(hic);
-  Serial.print(F("°C"));
-
   // wait for input from script
   while (!Serial.available());
   in = Serial.readString();
@@ -137,7 +128,7 @@ void loop() {
     display.clearDisplay();
     display_clock();
   } else if (in == "a") {
-    display_all();
+    display_all(t, h, hic);
   }
 }
 
@@ -198,7 +189,7 @@ void display_clock() {
   }
 }
 
-void display_all() {
+void display_all(float c, float h, float hic) {
   display.clearDisplay();
   int pos = 0;
   display.setRotation(3);
@@ -220,9 +211,17 @@ void display_all() {
     String temp = in.substring(0, splitIdx);
     String time = in.substring(splitIdx + 1, in.length());
 
+/*
     // print temp
     display.setCursor(0, 0);
     display.print(temp + "C");
+*/
+
+    // print temp, humidity, heat index
+    display.setCursor(0, 0);
+    display.print(t + "°C ");
+    display.print(h + "% ");
+    display.print(hic + "°C");
 
     // graph temp (from y pos 32-96)
     display.fillRect(pos, 32, 4, 64, SSD1306_BLACK);
